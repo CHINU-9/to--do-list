@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Daily Ledger — To-Do List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="page">
+
+    <header class="masthead">
+      <p class="masthead__kicker">Kept daily, since today</p>
+      <h1 class="masthead__title">The Daily Ledger</h1>
+      <p class="masthead__date" id="todayDate"></p>
+    </header>
+
+    <form class="entry-row" id="entryForm" autocomplete="off">
+      <input
+        type="text"
+        id="entryInput"
+        class="entry-row__input"
+        placeholder="Write a task and press enter…"
+        maxlength="7000"
+        required
+      >
+      <button type="submit" class="entry-row__submit">Add to ledger</button>
+    </form>
+
+    <section class="ledger" aria-label="Task list">
+      <div class="ledger__head">
+        <span class="ledger__head-label">Open</span>
+        <span class="ledger__head-count" id="openCount">0</span>
+        <span class="ledger__head-divider" aria-hidden="true">·</span>
+        <span class="ledger__head-label">Settled</span>
+        <span class="ledger__head-count" id="doneCount">0</span>
+      </div>
+
+      <ol class="ledger__list" id="taskList"></ol>
+
+      <p class="ledger__empty" id="emptyState">
+        The page is blank. Add the first thing you need to do today.
+      </p>
+    </section>
+
+    <p class="footnote">Drag a row by its handle, or use the arrows, to change the order. Everything here stays in this browser.</p>
+
+  </div>
+
+  <template id="taskTemplate">
+    <li class="task" draggable="true">
+      <span class="task__index"></span>
+      <span class="task__handle" title="Drag to reorder" aria-hidden="true">⠿</span>
+      <label class="task__check">
+        <input type="checkbox" class="task__checkbox">
+        <span class="task__box" aria-hidden="true"></span>
+      </label>
+      <span class="task__text"></span>
+      <button type="button" class="task__copy" title="Copy task text" aria-label="Copy task text">⧉</button>
+      <span class="task__order">
+        <button type="button" class="task__move" data-dir="up" title="Move up" aria-label="Move task up">▲</button>
+        <button type="button" class="task__move" data-dir="down" title="Move down" aria-label="Move task down">▼</button>
+      </span>
+      <button type="button" class="task__remove" title="Remove task" aria-label="Remove task">✕</button>
+    </li>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>

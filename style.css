@@ -1,0 +1,380 @@
+/* ---------------------------------------------------
+   The Daily Ledger — a checklist that reads like a
+   notebook page, not a SaaS dashboard.
+--------------------------------------------------- */
+
+:root {
+  --ink: #EDEAE2;
+  --ink-dim: #A7ADA4;
+  --paper: #1B1F1D;
+  --paper-raised: #222724;
+  --rule: #33392F;
+  --gold: #C9A227;
+  --sage: #7C9885;
+  --danger: #B5654A;
+
+  --serif: "Fraunces", Georgia, serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.page {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 64px 24px 80px;
+}
+
+/* ---------- Masthead ---------- */
+
+.masthead {
+  text-align: left;
+  border-bottom: 2px solid var(--rule);
+  padding-bottom: 28px;
+  margin-bottom: 32px;
+}
+
+.masthead__kicker {
+  font-size: 13px;
+  color: var(--sage);
+  margin: 0 0 6px;
+  font-style: italic;
+  font-family: var(--serif);
+}
+
+.masthead__title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(36px, 6vw, 52px);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.masthead__date {
+  margin: 10px 0 0;
+  color: var(--ink-dim);
+  font-size: 14px;
+}
+
+/* ---------- Entry row ---------- */
+
+.entry-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.entry-row__input {
+  flex: 1;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 14px 16px;
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.entry-row__input::placeholder {
+  color: var(--ink-dim);
+}
+
+.entry-row__input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.entry-row__submit {
+  background: var(--gold);
+  color: #1B1F1D;
+  border: none;
+  border-radius: 3px;
+  padding: 0 20px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.entry-row__submit:hover {
+  background: #DDB640;
+}
+
+.entry-row__submit:focus-visible,
+.entry-row__input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* ---------- Ledger section ---------- */
+
+.ledger__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-dim);
+  padding-bottom: 10px;
+  margin-bottom: 4px;
+}
+
+.ledger__head-label {
+  text-transform: none;
+}
+
+.ledger__head-count {
+  font-family: var(--serif);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.ledger__head-divider {
+  margin: 0 4px;
+  color: var(--rule);
+}
+
+.ledger__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ledger__empty {
+  display: none;
+  color: var(--ink-dim);
+  font-style: italic;
+  font-family: var(--serif);
+  padding: 28px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.ledger__empty.is-visible {
+  display: block;
+}
+
+/* ---------- Task row ---------- */
+
+.task {
+  display: grid;
+  grid-template-columns: 28px 20px 24px 1fr auto auto 28px;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 4px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+  transition: background 0.15s ease;
+}
+
+.task:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.task.is-dragging {
+  opacity: 0.35;
+}
+
+.task.is-over {
+  background: var(--paper-raised);
+}
+
+.task__index {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-dim);
+  font-size: 14px;
+  text-align: right;
+}
+
+.task__handle {
+  cursor: grab;
+  color: var(--ink-dim);
+  font-size: 16px;
+  text-align: center;
+  user-select: none;
+}
+
+.task__handle:active {
+  cursor: grabbing;
+}
+
+.task__check {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.task__checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.task__box {
+  width: 19px;
+  height: 19px;
+  border: 1.5px solid var(--ink-dim);
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+}
+
+.task__checkbox:checked + .task__box {
+  background: var(--sage);
+  border-color: var(--sage);
+}
+
+.task__checkbox:checked + .task__box::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border-right: 2px solid #1B1F1D;
+  border-bottom: 2px solid #1B1F1D;
+  transform: rotate(40deg);
+}
+
+.task__checkbox:focus-visible + .task__box {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.task__text {
+  font-size: 15.5px;
+  word-break: break-word;
+}
+
+.task.is-done .task__text {
+  color: var(--ink-dim);
+  text-decoration: line-through;
+  text-decoration-color: var(--sage);
+}
+
+.task.is-done .task__index {
+  color: var(--sage);
+}
+
+.task__copy {
+  background: none;
+  border: none;
+  color: var(--ink-dim);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 2px;
+}
+
+.task__copy:hover {
+  color: var(--gold);
+  background: var(--paper-raised);
+}
+
+.task__copy.is-copied {
+  color: var(--sage);
+}
+
+.task__order {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.task__move {
+  background: none;
+  border: none;
+  color: var(--ink-dim);
+  font-size: 9px;
+  line-height: 1;
+  padding: 3px 4px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.task__move:hover {
+  color: var(--gold);
+  background: var(--paper-raised);
+}
+
+.task__move:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.task__move:disabled:hover {
+  color: var(--ink-dim);
+  background: none;
+}
+
+.task__remove {
+  background: none;
+  border: none;
+  color: var(--ink-dim);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 2px;
+  justify-self: end;
+}
+
+.task__remove:hover {
+  color: var(--danger);
+  background: var(--paper-raised);
+}
+
+/* ---------- Footnote ---------- */
+
+.footnote {
+  margin-top: 36px;
+  font-size: 12.5px;
+  color: var(--ink-dim);
+  text-align: left;
+}
+
+/* ---------- Motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .task {
+    transition: none;
+  }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 480px) {
+  .page {
+    padding: 40px 16px 60px;
+  }
+
+  .task {
+    grid-template-columns: 22px 16px 22px 1fr auto auto 24px;
+    gap: 8px;
+  }
+
+  .entry-row {
+    flex-direction: column;
+  }
+
+  .entry-row__submit {
+    padding: 12px;
+  }
+}
